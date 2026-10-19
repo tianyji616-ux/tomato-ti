@@ -96,11 +96,11 @@ body:after{content:"🍅";bottom:12px;left:10px;transform:rotate(-14deg)}
   <article class="card feedback-card">
     <section class="hero invite-hero"><div class="tomato-mark" aria-hidden="true">🍅 ✦ ☁️</div><h2>给番茄宇宙留句话吧！</h2><p>你的真实感受，会帮助我们把番茄TI做得更有趣。</p></section>
     <section class="section feedback-section">
-      <div class="privacy-note">🔒 匿名体验反馈：无需填写姓名、手机号或微信号。请确认 Google Forms 未开启邮箱收集，并允许持链接者填写。</div>
+      <div class="privacy-note">💙 留下你的体验感受就好，请勿填写姓名、手机号、微信号等个人信息。</div>
       <div class="google-form-frame-wrap">
         <iframe class="google-form-frame" src="https://docs.google.com/forms/d/e/1FAIpQLScCzAVFzjDf2dL1SiC7EBWTa-3DgFTdLpewssWp34YtMRpH5A/viewform?embedded=true" title="一颗大·番茄TI 匿名体验反馈表单" loading="lazy" frameborder="0" marginheight="0" marginwidth="0">正在加载表单…</iframe>
       </div>
-      <p class="feedback-status">提交后，反馈将保存到你创建的 Google Forms 回复中。请在表单的「回复」页面连接 Google Sheets，以便自动汇总数据。</p>
+      <p class="feedback-status">表单无法加载？可以在新窗口打开填写。</p><a class="btn btn-secondary" id="openFeedbackBtn" href="https://docs.google.com/forms/d/e/1FAIpQLScCzAVFzjDf2dL1SiC7EBWTa-3DgFTdLpewssWp34YtMRpH5A/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">打开反馈表单 ↗</a>
     </section>
   </article>
   <button class="text-btn" id="backToResultBtn">返回我的人格结果</button>
@@ -180,9 +180,10 @@ $('nextBtn').addEventListener('click',()=>{if(!answers[currentQuestion])return;i
 $('quitBtn').addEventListener('click',()=>showView('homeView'));
 $('restartBtn').addEventListener('click',()=>showView('homeView'));
 $('reviewAnswersBtn').addEventListener('click',()=>{currentQuestion=0;renderQuestion();showView('quizView');});
-$('shareBtn').addEventListener('click',async()=>{const p=personas.find(p=>p.name===$('personaName').textContent);const shareText='我测出的番茄TI职场人格是：'+p.name+'\n'+p.tag+'\n'+p.quote+'\n你是什么番？来认识你的专属番茄搭子。';try{if(navigator.share){await navigator.share({title:'一颗大·番茄TI',text:shareText})}else if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(shareText);$('toast').textContent='分享文案已复制，快发给朋友吧！'}else{const ta=document.createElement('textarea');ta.value=shareText;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();$('toast').textContent='分享文案已复制，快发给朋友吧！'}}catch(e){if(e.name!=='AbortError')$('toast').textContent='可以截图保存这张结果卡，再分享给朋友。'}});
+$('shareBtn').addEventListener('click',async()=>{const p=personas.find(p=>p.name===$('personaName').textContent);window.tomatoTrack&&window.tomatoTrack('share_click',{persona_id:p.id});const shareText='我测出的番茄TI职场人格是：'+p.name+'\n'+p.tag+'\n'+p.quote+'\n你是什么番？来认识你的专属番茄搭子。';try{if(navigator.share){await navigator.share({title:'一颗大·番茄TI',text:shareText})}else if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(shareText);$('toast').textContent='分享文案已复制，快发给朋友吧！'}else{const ta=document.createElement('textarea');ta.value=shareText;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();$('toast').textContent='分享文案已复制，快发给朋友吧！'}}catch(e){if(e.name!=='AbortError')$('toast').textContent='可以截图保存这张结果卡，再分享给朋友。'}});
 
 $('openInviteBtn').addEventListener('click',()=>{window.tomatoTrack&&window.tomatoTrack('invite_view');showView('inviteView');});
+$('openFeedbackBtn').addEventListener('click',()=>{window.tomatoTrack&&window.tomatoTrack('feedback_open');});
 $('backToResultBtn').addEventListener('click',()=>showView('resultView'));
 document.querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{img.style.display='none';}));
 showView('homeView');
