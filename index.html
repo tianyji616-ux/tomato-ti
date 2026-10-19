@@ -38,6 +38,9 @@ body:after{content:"🍅";bottom:12px;left:10px;transform:rotate(-14deg)}
   };
   if (/^G-[A-Z0-9]+$/.test(window.TOMATO_GA4_ID)) {
     var gaScript = document.createElement('script');
+    window.tomatoStatsStatus = 'loading';
+    gaScript.onload = function(){window.tomatoStatsStatus = 'loaded';};
+    gaScript.onerror = function(){window.tomatoStatsStatus = 'failed';};
     gaScript.async = true;
     gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.TOMATO_GA4_ID;
     document.head.appendChild(gaScript);
@@ -188,4 +191,27 @@ $('openFeedbackBtn').addEventListener('click',()=>{window.tomatoTrack&&window.to
 $('backToResultBtn').addEventListener('click',()=>showView('resultView'));
 document.querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{img.style.display='none';}));
 showView('homeView');
-</script></body></html>
+</script>
+<script>
+if(new URLSearchParams(location.search).get('stats_debug')==='1'){
+ const panel=document.createElement('aside');
+ panel.id='statsDebugPanel';
+ panel.setAttribute('role','status');
+ panel.style.cssText='position:relative;z-index:10;margin:16px;padding:18px;border:2px solid #54769a;border-radius:16px;background:#fff;color:#455d76;font:15px/1.7 system-ui;overflow-wrap:anywhere';
+ document.body.prepend(panel);
+ const started=Date.now();
+ function updateStatsDebug(){
+  const status=window.tomatoStatsStatus;
+  const label=status==='loaded'?'已加载':status==='failed'?'加载失败：请求被网络、浏览器或插件阻止':Date.now()-started>15000?'等待超过15秒，尚未加载完成':'正在连接，请稍等…';
+  const requests=performance.getEntriesByType('resource').filter(r=>{try{const u=new URL(r.name);return /(^|\.)google-analytics\.com$/.test(u.hostname)&&u.pathname.endsWith('/collect');}catch(e){return false;}});
+  const title=document.createElement('strong');title.textContent='番茄TI · 统计连接检查';
+  panel.replaceChildren(title);
+  for(const text of ['版本：统计检查 v1','衡量 ID：'+window.TOMATO_GA4_ID,'Google统计脚本：'+label,'浏览器中观察到的统计请求记录：'+requests.length,'请求记录不代表GA后台已收到数据。请停留20秒后，将此框截图发回。']){
+   const line=document.createElement('div');line.textContent=text;panel.appendChild(line);
+  }
+ }
+ updateStatsDebug();
+ const timer=setInterval(()=>{updateStatsDebug();if(Date.now()-started>30000)clearInterval(timer);},1000);
+}
+</script>
+</body></html>
