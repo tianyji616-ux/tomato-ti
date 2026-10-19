@@ -183,7 +183,7 @@ $('restartBtn').addEventListener('click',()=>showView('homeView'));
 $('reviewAnswersBtn').addEventListener('click',()=>{currentQuestion=0;renderQuestion();showView('quizView');});
 $('shareBtn').addEventListener('click',async()=>{const p=personas.find(p=>p.name===$('personaName').textContent);window.tomatoTrack&&window.tomatoTrack('share_click',{persona_id:p.id});const shareText='我测出的番茄TI职场人格是：'+p.name+'\n'+p.tag+'\n'+p.quote+'\n你是什么番？来认识你的专属番茄搭子。';try{if(navigator.share){await navigator.share({title:'一颗大·番茄TI',text:shareText})}else if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(shareText);$('toast').textContent='分享文案已复制，快发给朋友吧！'}else{const ta=document.createElement('textarea');ta.value=shareText;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();$('toast').textContent='分享文案已复制，快发给朋友吧！'}}catch(e){if(e.name!=='AbortError')$('toast').textContent='可以截图保存这张结果卡，再分享给朋友。'}});
 
-$('openInviteBtn').addEventListener('click',()=>{window.tomatoTrack&&window.tomatoTrack('invite_view');showView('inviteView');});
+$('openInviteBtn').addEventListener('click',()=>{window.tomatoTrack&&window.tomatoTrack('invite_view');window.location.assign('https://docs.google.com/forms/d/e/1FAIpQLScCzAVFzjDf2dL1SiC7EBWTa-3DgFTdLpewssWp34YtMRpH5A/viewform?usp=dialog');});
 $('openFeedbackBtn').addEventListener('click',()=>{window.tomatoTrack&&window.tomatoTrack('feedback_open');});
 $('backToResultBtn').addEventListener('click',()=>showView('resultView'));
 document.querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{img.style.display='none';}));
