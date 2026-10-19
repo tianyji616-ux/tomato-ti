@@ -84,7 +84,7 @@ body:after{content:"🍅";bottom:12px;left:10px;transform:rotate(-14deg)}
   <article class="card" id="resultCard">
   <section class="hero"><div class="hero-top"><span>番茄TI</span><span class="type-chip">YOUR TOMATO TYPE</span></div><div class="type-no" id="typeNo">TYPE 01</div><h2 id="personaName"></h2><p class="tagline" id="personaTagline"></p><div class="role-frame"><img class="role-img" id="roleImage" decoding="async" alt="番茄TI人格角色插画"></div><p class="quote" id="personaQuote"></p></section>
   <section class="section"><h3 class="section-title" id="personaStoryTitle">这颗番的性格小剧场</h3><p class="tagline" id="personaKeywords"></p><p class="story" id="personaStory"></p><div class="highlight"><div class="highlight-label">角色记忆点</div><p id="personaSummary"></p></div></section>
-  <section class="product"><div class="product-kicker" id="productKicker">你的专属番茄搭子</div><h3 id="productName"></h3><p class="product-desc" id="productDesc"></p></section>
+  <section class="product"><div class="product-kicker" id="productKicker">你的专属番茄搭子</div><h3 id="productName"></h3><div class="product-img-wrap"><img class="product-img" id="productImage" decoding="async" alt="番茄搭子产品展示"></div><p class="product-desc" id="productDesc"></p></section>
   <footer class="footer"><h3>你是什么番？</h3><p>来认识你的专属番茄搭子</p><div class="dots" aria-hidden="true"><span></span><span></span><span></span></div><div class="actions"><button class="btn btn-secondary" id="restartBtn">重新测试</button><button class="btn btn-primary" id="shareBtn">生成分享卡</button></div><div class="toast" id="toast" aria-live="polite"></div></footer>
   </article>
   <button class="text-btn" id="reviewAnswersBtn">查看我的答题结果</button>
@@ -172,7 +172,7 @@ const roleImages = {"01":"assets/6e5299462d675cf7.webp","02":"assets/b49e2b21681
 const productImages = {"01":"assets/8be3a227a36086bc.webp","02":"assets/96d70192945436d9.webp","03":"assets/a3bd86c893b10822.webp","04":"assets/d1917bf7e43885fc.webp","05":"assets/7505c3617f622eae.webp","06":"assets/bb22519a5cd013bd.webp","07":"assets/a0d079c1525a6724.webp","08":"assets/e6e8dfdbbb938f96.webp","09":"assets/046a52352ca4490c.webp","10":"assets/dd6cd14332d721ad.webp","11":"assets/898ba1d1c534e2dd.webp","12":"assets/040aad28e59c0ef2.webp","13":"assets/7248f08a021fb001.webp"};
 function renderPersona(i){
  const p=personas[i];const nickname=p.name.split(/[·\s]/)[0];$('personaStoryTitle').textContent=nickname+'的性格小剧场';$('personaKeywords').textContent='人格关键词：'+p.keywords;$('productKicker').textContent=p.id+' · '+nickname+'的番茄搭子';$('typeNo').textContent='TYPE '+p.id;$('personaName').textContent=p.name;$('personaTagline').textContent=p.tag;$('personaQuote').textContent='「'+p.quote+'」';$('personaSummary').textContent=p.summary;$('personaStory').textContent=p.story;$('productName').textContent=p.product;$('productDesc').textContent=p.desc;
- $('roleImage').src=roleImages[p.id] || '';$('roleImage').alt=p.name+'角色形象';$('toast').textContent='';
+ $('roleImage').src=roleImages[p.id] || '';$('roleImage').alt=p.name+'角色形象';$('productImage').src=productImages[p.id] || '';$('productImage').alt=p.product+'产品展示';$('toast').textContent='';
 }
 function finishQuiz(){const result=calculateResult();const idx=personas.findIndex(p=>p.id===result.persona.id);renderPersona(idx);showView('resultView');window.tomatoTrack&&window.tomatoTrack('test_complete',{question_count:questions.length,persona_id:result.persona.id});}
 $('startBtn').addEventListener('click',startQuiz);
